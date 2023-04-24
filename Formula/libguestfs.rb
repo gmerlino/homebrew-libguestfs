@@ -32,7 +32,7 @@ class Libguestfs < Formula
     sha256 catalina: "70ab150bb49f13e4312b1543328a5f7109d3d7acacc6c21e13cef9b1e10aaaa1"
   end
 
-  depends_on "#{@tap}/automake-1.15" => :build
+  depends_on "gmerlino/libguestfs/automake-1.15" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
