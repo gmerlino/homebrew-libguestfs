@@ -36,7 +36,7 @@ class Libguestfs < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "truncate" => :build
+  depends_on "coreutils" => :build
   depends_on "augeas"
   depends_on "cdrtools"
   depends_on "gettext"
@@ -79,6 +79,8 @@ class Libguestfs < Formula
 
     ENV["AUGEAS_CFLAGS"] = "-I#{Formula["augeas"].opt_include}"
     ENV["AUGEAS_LIBS"] = "-L#{Formula["augeas"].opt_lib}"
+    
+    ENV["PATH"] = "-I#{Formula["coreutils"].opt_libexec}/gnubin:$PATH"
 
     args = [
       "--disable-probes",
