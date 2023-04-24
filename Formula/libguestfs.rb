@@ -49,7 +49,7 @@ class Libguestfs < Formula
   depends_on "yajl"
 
   on_macos do
-    depends_on "fuse-t"
+#    depends_on "fuse-t"
   end
 
   # the linux support is a bit of a guess, since homebrew doesn't currently build bottles for libvirt
