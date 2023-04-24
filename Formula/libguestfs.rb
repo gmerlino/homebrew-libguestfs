@@ -1,26 +1,25 @@
-require "digest"
+//require "digest"
+#class OsxfuseRequirement < Requirement
+#  fatal true
 
-class OsxfuseRequirement < Requirement
-  fatal true
+#  satisfy(build_env: false) { self.class.binary_osxfuse_installed? }
 
-  satisfy(build_env: false) { self.class.binary_osxfuse_installed? }
+#  def self.binary_osxfuse_installed?
+#    File.exist?("/usr/local/include/fuse/fuse.h") &&
+#      !File.symlink?("/usr/local/include/fuse")
+#  end
 
-  def self.binary_osxfuse_installed?
-    File.exist?("/usr/local/include/osxfuse/fuse/fuse.h") &&
-      !File.symlink?("/usr/local/include/osxfuse/fuse")
-  end
+#  env do
+#    unless HOMEBREW_PREFIX.to_s == "/usr/local"
+#      ENV.append_path "HOMEBREW_LIBRARY_PATHS", "/usr/local/lib"
+#      ENV.append_path "HOMEBREW_INCLUDE_PATHS", "/usr/local/include/fuse"
+#    end
+#  end
 
-  env do
-    unless HOMEBREW_PREFIX.to_s == "/usr/local"
-      ENV.append_path "HOMEBREW_LIBRARY_PATHS", "/usr/local/lib"
-      ENV.append_path "HOMEBREW_INCLUDE_PATHS", "/usr/local/include/fuse"
-    end
-  end
-
-  def message
-    "macFUSE is required to build libguestfs. Please run `brew install --cask macfuse` first."
-  end
-end
+#  def message
+#    "macFUSE is required to build libguestfs. Please run `brew install --cask macfuse` first."
+#  end
+#end
 
 class Libguestfs < Formula
   desc "Set of tools for accessing and modifying virtual machine (VM) disk images"
@@ -50,7 +49,7 @@ class Libguestfs < Formula
   depends_on "yajl"
 
   on_macos do
-    depends_on OsxfuseRequirement => :build
+    depends_on cask: "fuse-t" => :build
   end
 
   # the linux support is a bit of a guess, since homebrew doesn't currently build bottles for libvirt
@@ -75,8 +74,8 @@ class Libguestfs < Formula
     ENV["LIBTINFO_CFLAGS"] = "-I#{Formula["ncurses"].opt_include}"
     ENV["LIBTINFO_LIBS"] = "-lncurses"
 
-    ENV["FUSE_CFLAGS"] = "-D_FILE_OFFSET_BITS=64 -D_DARWIN_USE_64_BIT_INODE -I/usr/local/include/osxfuse/fuse"
-    ENV["FUSE_LIBS"] = "-losxfuse -pthread -liconv"
+    ENV["FUSE_CFLAGS"] = "-D_FILE_OFFSET_BITS=64 -D_DARWIN_USE_64_BIT_INODE -I/usr/local/include/fuse"
+    ENV["FUSE_LIBS"] = "-lfuse -pthread -liconv"
 
     ENV["AUGEAS_CFLAGS"] = "-I#{Formula["augeas"].opt_include}"
     ENV["AUGEAS_LIBS"] = "-L#{Formula["augeas"].opt_lib}"
